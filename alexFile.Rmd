@@ -1,0 +1,73 @@
+---
+title: "Midterm Project"
+author: "ALEXANDER WILLIAMS (anw5ph)"
+
+output: 
+    html_document:
+      number_sections: no
+      toc: TRUE
+      toc_depth: 4
+      toc_float: true
+      toc_collapsed: true
+      theme: journal
+      code_folding: show
+---
+
+```{r, echo=FALSE, results = 'hide', message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+
+```
+
+# Analyzing Trends Between a Student's Background and the Effect on Their Alcohol Consumption
+
+## Introduction / Abstract
+
+## Dataset Summary
+```{r}
+# Load the dataset
+
+df1 <- read.csv('student-mat.csv')
+df2 <- read.csv('student-por.csv')
+
+df <- merge(df1,df2,by=c("school","sex","age","address","famsize","Pstatus","Medu","Fedu","Mjob","Fjob","reason","nursery","internet"))
+
+head(df)
+
+```
+
+## Question 1
+
+### Question
+
+### Prediction
+
+### Chart & Chart Caption
+```{r}
+
+df$Walc.x <- factor(df$Walc.x, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
+df$health.x <- factor(df$health.x, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
+
+ggplot(df, aes(x = Walc.x, fill = sex)) +
+  geom_bar(position = position_dodge()) + 
+  theme_bw()
+```
+### Discussion
+
+### Chart Justification
+
+## Question 2
+
+### Question
+
+### Prediction
+
+### Chart & Chart Caption
+
+### Discussion
+
+### Chart Justification
+
+## Conclusion
+
