@@ -31,8 +31,6 @@ library(ggplot2)
 df1 <- read.csv('student-mat.csv')
 df2 <- read.csv('student-por.csv')
 
-df <- merge(df1,df2,by=c("school","sex","age","address","famsize","Pstatus","Medu","Fedu","Mjob","Fjob","reason","nursery","internet"))
-
 head(df)
 
 ```
@@ -40,18 +38,31 @@ head(df)
 ## Question 1
 
 ### Question
+In this sample population, does alcohol consumption have an effect on number of absences in a math class or a Portuguese class. If so, does weekday or weekend alcohol consumption have more of an effect? 
 
 ### Prediction
-
+We predict that alcohol consumption will have a positive correlation with the number of absences in both classes that a student has and that weekend alcohol consumption will have stronger positive trend than weekday alcohol consumption will have. 
 ### Chart & Chart Caption
 ```{r}
 
-df$Walc.x <- factor(df$Walc.x, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
-df$health.x <- factor(df$health.x, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
+df1$Walc <- factor(df1$Walc, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
+df1$Dalc <- factor(df1$Dalc, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
+df1$health <- factor(df1$health, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
 
-ggplot(df, aes(x = Walc.x, fill = sex)) +
+df1_sub_thirty <- subset(df1, absences <= 30)
+
+ggplot(df1, aes(x = absences, fill = Dalc)) +
   geom_bar(position = position_dodge()) + 
   theme_bw()
+
+ggplot(df1_sub_thirty, aes(x = absences, fill = Dalc)) +
+  geom_bar(position = position_dodge()) + 
+  theme_bw()
+
+#ggplot(df1, aes(x = absences, y = Walc)) + 
+#  geom_point() +
+#  theme_bw()
+
 ```
 ### Discussion
 
