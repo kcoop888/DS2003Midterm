@@ -117,6 +117,15 @@ In this sample, does the frequency that a student go out have a relationship wit
 We predict that students who go out more will receive a lower final grade and students who go out less will receive a higher final grade. Therefore, there will be a negative correlation with the frequency a student goes out and the final grade they received. 
 
 ### Chart & Chart Caption
+``` {r}
+df1$G3 <- factor(df1$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "8", "9", "10",
+                                  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), 
+                 ordered= TRUE)
+df1$goout <- factor(df1$goout, levels=c("1", "2", "3", "4", "5"), ordered=TRUE)
+
+df1$G3_interval <-fct_collapse(df1$G3, "0-4" = c("0", "1", "2", "3", "4"), "5-8" = c("5", "6", "7", "8"), "9-12" = c("9", "10", "11", "12"), "13-16" = c("13", "14", "15", "16"), "17-20" = c("17", "18", "19", "20"))
+
+```
 
 ### Discussion
 
