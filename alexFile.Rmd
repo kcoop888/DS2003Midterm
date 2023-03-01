@@ -24,20 +24,19 @@ library(ggplot2)
 
 ## Introduction / Abstract
 
-For the DS 2003 Midterm Project, we will be investigating the relationships of different variables in a dataset for Student Alcohol Consumption. This dataset was collected from two secondary schools in Portugal and contains a variety of variables ranging from demographics to drinking habits. We will use this dataset to to determine if there are any trends that we can identify regarding weekend drinking habits and frequency of going out for students, as well as, drinking habits and the final grade the student received in the course. As the data is from two schools in Portugal, the grading scale will be different and since the legal drinking age 18, there will be data with students drinking younger than 21.
+For the DS 2003 Midterm Project, we will be investigating the relationships of different variables in a dataset for Student Alcohol Consumption. This dataset was collected from two secondary schools in Portugal and contains a variety of variables ranging from demographics to drinking habits. We will use this dataset to to determine if there are any trends that we can identify regarding weekend drinking habits and frequency of going out for students, as well as, drinking habits and the final grade the student received in the course. As the data is from two schools in Portugal, the grading scales will be different and since the legal drinking age 18, there will be data with students drinking younger than 21.
 
 ## Dataset Summary
 
-We will be using two datasets for this report. They both come from the same source and have the same columns (variables). The difference between the two is that one is for students in a Portuguese course and the other is for students in a math course. We will use the two to determine if the trends we observe for one course is also present in the other course.
+We will be using two datasets for this report. They both come from the same source and have the same columns (variables). The difference between the two is that one (df1) is for students in a math course and the other (df2) is for students in a Portuguese course. We will use the two to determine if the trends we observe for one course is also evident in the other course.
 
 For the first question of the report, we are using the following columns (variables): 
 1. Walc - weekend alcohol consumption (factor: from 1 - very low to 5 - very high)
 2. goout - going out with friends (factor: from 1 - very low to 5 - very high)
 
 For the second question of the report, we are using the following columns (variables): 
-1. 
-2. 
-3. 
+1. goout - going out with friends (factor: from 1 - very low to 5 - very high)
+2. G3 - final grade (numeric: from 0 to 20, output target)
 
 Not used columns (variables):
 1. school - student's school (binary: 'GP' - Gabriel Pereira or 'MS' - Mousinho da Silveira)
@@ -69,8 +68,7 @@ Not used columns (variables):
 27. health - current health status (numeric: from 1 - very bad to 5 - very good)
 28. G1 - first period grade (numeric: from 0 to 20)
 29. G2 - second period grade (numeric: from 0 to 20)
-30. G3 - final grade (numeric: from 0 to 20, output target)
-31. Dalc - daily alcohol consumption (factor: from 1 - very low to 5 - very high)
+30. Dalc - daily alcohol consumption (factor: from 1 - very low to 5 - very high)
 
 ```{r}
 # Load the dataset
@@ -78,42 +76,35 @@ Not used columns (variables):
 df1 <- read.csv('student-mat.csv')
 df2 <- read.csv('student-por.csv')
 
-head(df)
 
 ```
 
 ## Question 1
 
 ### Question
-In this sample population, does alcohol consumption have an effect on number of absences in a math class or a Portuguese class. If so, does weekday or weekend alcohol consumption have more of an effect? 
+In this sample population, does the frequency a student goes out have a relationship with the level of weekend alcohol consumption? 
 
 ### Prediction
-We predict that alcohol consumption will have a positive correlation with the number of absences in both classes that a student has and that weekend alcohol consumption will have stronger positive trend than weekday alcohol consumption will have. 
+We predict that number of students who have the highest weekend alcohol consumption will go out more, and the number students who have the least weekend alcohol consumption will go out less.
+
 ### Chart & Chart Caption
 ```{r}
 
-df1$Walc <- factor(df1$Walc, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
-df1$Dalc <- factor(df1$Dalc, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
-df1$health <- factor(df1$health, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
-
-df1_sub_thirty <- subset(df1, absences <= 30)
-
-ggplot(df1, aes(x = absences, fill = Dalc)) +
-  geom_bar(position = position_dodge()) + 
-  theme_bw()
-
-ggplot(df1_sub_thirty, aes(x = absences, fill = Dalc)) +
-  geom_bar(position = position_dodge()) + 
-  theme_bw()
-
-#ggplot(df1, aes(x = absences, y = Walc)) + 
-#  geom_point() +
-#  theme_bw()
 
 ```
 ### Discussion
 
+We constructed a bar chart that had the number of times a student goes out on the x-axis and the count of students that go out that many times on the y-axis. Additionally, we separated each bar by the level of weekend alcohol consumption. From there, we faceted the graph by weekend alcohol consumption so that we could more easily analyze the relationship between going out and the number of students who go out that much for a particular level of weekend alcohol consumption. 
+
+First looking at the data for the math class, the lowest level of weekend alcohol consumption seems to have a left-skewed normal curve based on the number of times a student goes out. The second lowest level and the medium level of weekend alcohol consumption seem to have a normal curve based on the number of times a student goes out. The two highest levels of weekend alcohol consumption seems to have a linearly increasing trend as a student goes out more. 
+
+Second looking at the data for the Portuguese class, the lowest level of weekend alcohol consumption seems to have a left-skewed normal curve based on the number of times a student goes out. The second lowest level and the medium level of weekend alcohol consumption seem to have a normal curve based on the number of times a student goes out. The two highest levels of weekend alcohol consumption seems to have a linearly increasing trend as a student goes out more. 
+
+Although the numbers may look different between the two classes, the trends / distributions for going out and weekend alcohol consumption are the same. As the number of nights a student goes out increases, there seems to be a positive linear relationship with the number of students and those with the highest levels of weekend alcohol consumption. As the number of nights a student increases until 3, the number of students who go out with the lowest levels of weekend alcohol consumption increases and after 3, the trend becomes negative, signifying a normal-curved relationship. The normal trend is understandable for the lower levels of alcohol consumption because as the number of nights a student goes out increases, the number of students who hardly consume alcohol is going to begin to decrease after a certain point.
+
 ### Chart Justification
+
+We decided to answer our question by using bar charts that were differentiated and faceted by the level of weekend alcohol consumption because we thought that it would be the best strategy for visualizing the trends for the varying levels of weekend alcohol consumption based on the number of students and the frequency they went out with friends by being able to view each trend separately. 
 
 ## Question 2
 
