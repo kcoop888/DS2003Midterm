@@ -1,5 +1,5 @@
 ---
-title: "Midterm Report - Group 14"
+title: "Midterm Report"
 author: "Alexander Williams (anw5ph), Kevin Cooper (kac4bh), and Brian Yoon (byy2yt)"
 
 output: 
@@ -25,7 +25,7 @@ library(scales)
 
 ## Introduction / Abstract
 
-For the DS 2003 Midterm Project, we will be investigating the relationships of different variables in a dataset for Student Alcohol Consumption. This dataset was collected from two secondary schools in Portugal and contains a variety of variables ranging from demographics to drinking habits. We will use this dataset to to determine if there are any trends that we can identify regarding weekend drinking habits and frequency of going out for students, as well as, frequency of going out and the final grade the student received in the course. As the data is from two schools in Portugal, the grading scales will be different and since the legal drinking age 18, there will be data with students drinking much younger than 21.
+For the DS 2003 Midterm Project, we will be investigating the relationships of different variables in a dataset for Student Alcohol Consumption. This dataset was collected from two secondary schools in Portugal and contains a variety of variables ranging from demographics to drinking habits. We will use this dataset to to determine if there are any trends that we can identify regarding weekend drinking habits and frequency of going out for students, as well as, drinking habits and the final grade the student received in the course. As the data is from two schools in Portugal, the grading scales will be different and since the legal drinking age 18, there will be data with students drinking younger than 21.
 
 ## Dataset Summary
 
@@ -37,7 +37,7 @@ For the first question of the report, we are using the following columns (variab
 
 For the second question of the report, we are using the following columns (variables): 
 1. goout - going out with friends (factor: from 1 - very low to 5 - very high)
-2. G3_interval - final grade, G3 data seperated into quartiles (factor: 0-8, 9-10, 11-13, 14-20)
+2. G3 - final grade (numeric: from 0 to 20, output target)
 
 Not used columns (variables):
 1. school - student's school (binary: 'GP' - Gabriel Pereira or 'MS' - Mousinho da Silveira)
@@ -69,8 +69,7 @@ Not used columns (variables):
 27. health - current health status (numeric: from 1 - very bad to 5 - very good)
 28. G1 - first period grade (numeric: from 0 to 20)
 29. G2 - second period grade (numeric: from 0 to 20)
-30. G3 - final grade (numeric: from 0 to 20, output target)
-31. Dalc - daily alcohol consumption (factor: from 1 - very low to 5 - very high)
+30. Dalc - daily alcohol consumption (factor: from 1 - very low to 5 - very high)
 
 ```{r}
 # Load the dataset
