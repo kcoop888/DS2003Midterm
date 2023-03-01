@@ -17,6 +17,7 @@ output:
 
 library(tidyverse)
 library(ggplot2)
+library(scales)
 
 ```
 
@@ -104,13 +105,16 @@ Although the numbers may look different between the two classes, the trends / di
 
 ### Chart Justification
 
-We decided to answer our question by using bar charts that were differentiated and faceted by the level of weekend alcohol consumption because we thought that it would be the best strategy for visualizing the trends for the varying levels of weekend alcohol consumption based on the number of students and the frequency they went out with friends by being able to view each trend separately. 
+We decided to answer our question by using bar charts that were differentiated and faceted by the level of weekend alcohol consumption because we thought that it would be the best strategy for visualizing the trends for the varying levels of weekend alcohol consumption based on the number of students and the frequency they went out with friends by being able to view each trend separately. Weaknesses of using this approach could be that bar charts are easily able to be modified to promote false information so it is important that the chart is created correctly and appropriately. 
 
 ## Question 2
 
 ### Question
 
+In this sample, does the frequency that a student go out have a relationship with the final grade they received in the course?
+
 ### Prediction
+We predict that students who go out more will receive a lower final grade and students who go out less will receive a higher final grade. Therefore, there will be a negative correlation with the frequency a student goes out and the final grade they received. 
 
 ### Chart & Chart Caption
 
