@@ -1,0 +1,246 @@
+---
+title: "Untitled"
+output: html_document
+date: "2023-02-24"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+---
+title: "Midterm Project"
+author: "ALEXANDER WILLIAMS (anw5ph)"
+
+output: 
+    html_document:
+      number_sections: no
+      toc: TRUE
+      toc_depth: 4
+      toc_float: true
+      toc_collapsed: true
+      theme: journal
+      code_folding: show
+---
+
+```{r, echo=FALSE, results = 'hide', message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+library(scales)
+
+```
+
+# Analyzing Trends Between a Student's Background and the Effect on Their Alcohol Consumption
+
+## Introduction / Abstract
+
+## Dataset Summary
+```{r}
+# Load the dataset
+setwd("C:/Users/brian/OneDrive/Desktop/0- Spring 2023 S8/DS2003/Midterm Project")
+df1 <- read.csv('student-mat.csv')
+df2 <- read.csv('student-por.csv')
+
+head(df1)
+
+```
+
+## Question 1
+
+### Question
+In this sample population, does alcohol consumption have an effect on number of absences in a math class or a Portuguese class. If so, does weekday or weekend alcohol consumption have more of an effect? 
+
+### Prediction
+We predict that alcohol consumption will have a positive correlation with the number of absences in both classes that a student has and that weekend alcohol consumption will have stronger positive trend than weekday alcohol consumption will have. 
+### Chart & Chart Caption
+```{r}
+
+df1$Walc <- factor(df1$Walc, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
+df1$Dalc <- factor(df1$Dalc, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
+df1$health <- factor(df1$health, levels = c("1", "2", "3", "4", "5"), ordered = TRUE)
+
+df1_sub_thirty <- subset(df1, absences <= 30)
+
+ggplot(df1, aes(x = absences, fill = Dalc)) +
+  geom_bar(position = position_dodge()) + 
+  theme_bw()
+
+ggplot(df1_sub_thirty, aes(x = absences, fill = Dalc)) +
+  geom_bar(position = position_dodge()) + 
+  theme_bw()
+
+#ggplot(df1, aes(x = absences, y = Walc)) + 
+#  geom_point() +
+#  theme_bw()
+
+```
+### Discussion
+
+### Chart Justification
+
+## Question 2
+
+### Question
+Does going out at a higher frequency negatively affect students' final grade in the math class as opposed to the students who responded that they go out less frequently?
+### Prediction
+We think that the students who go out more receive worse grades than their peers who go out less. This means that going out will have a negative correlation with final grades, as we predict that students who respond to their level of going out with a 1 receive higher grades in the class on average.
+### Chart & Chart Caption
+```{r}
+# Converting both G3 and goout into factors
+df1$G3 <- factor(df1$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "8", "9", "10",
+                                  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), 
+                 ordered= TRUE)
+df1$goout <- factor(df1$goout, levels=c("1", "2", "3", "4", "5"), ordered=TRUE)
+
+
+# Subsetting df1 by grade intervals
+### A: G3=17-20
+### B: G3=13-16
+### C: G3=9-12
+### D: G3=5-8
+### F: G3=0-4
+df1G3_1720 <- subset(df1, G3 >= 17)
+
+df1G3_1316 <- subset(df1, G3>=13 & G3<=16)
+
+df1G3_912 <- subset(df1, G3>=9 & G3<=12)
+
+df1G3_58 <- subset(df1, G3>=5 & G3<=8)
+
+df1G3_04 <- subset(df1, G3>=0 & G3<=4)
+
+
+# Creating histograms for each grade interval
+### Each histogram is measured by the percentage of students that received
+### a grade in its specified G3 interval based on their response to
+### how often they go out on a scale from 1-5.
+###### i.e. At what level (1-5) of going out did each student list
+######      and what grade did they receive.
+As_hist <- ggplot(df1G3_1720, aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='"A" students with a final grade of 17-20')
+
+Bs_hist <- ggplot(df1G3_1316, aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='"B" students with a final grade of 13-16')
+
+Cs_hist <- ggplot(df1G3_912, aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='"C" students with a final grade of 9-12')
+
+Ds_hist <- ggplot(df1G3_58, aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='"D" students with a final grade of 5-8')
+
+Fs_hist <- ggplot(df1G3_04, aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='"F" students with a final grade of 0-4')
+
+grades_by_goout <- list(As_hist, Bs_hist, Cs_hist, Ds_hist, Fs_hist)
+grades_by_goout
+
+```
+
+### Discussion
+
+### Chart Justification
+
+## Conclusion
+
+```{r}
+df1G3_q1 <- subset(df1, G3 <=8)
+
+df1G3_q2 <- subset(df1, G3>=9 & G3<=10)
+
+df1G3_q3 <- subset(df1, G3>=11 & G3<=13)
+
+df1G3_q4 <- subset(df1, G3>=14 & G3<=20)
+
+q1_hist <- ggplot(df1G3_q1, aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='Students in the first quartile (grade of 1-8)')
+
+q2_hist <- ggplot(df1G3_q2, aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='Students in the second quartile (grade of 9-10)')
+
+q3_hist <- ggplot(df1G3_q3, aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='Students in the third quartile (grade of 11-13)')
+
+q4_hist <- ggplot(df1G3_q4, aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='Students in the fourth quartile (grade of 14-20)')
+
+gradequartile_by_goout <- list(q1_hist, q2_hist, q3_hist, q4_hist)
+gradequartile_by_goout
+
+```
+
+
+
+```{r}
+third1 <- ggplot(df1[which(df1$G3>=0 & df1$G3<=9),], aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='Students in the first third (grade of 0-9)')
+
+third2 <- ggplot(df1[which(df1$G3>=10 & df1$G3<=12),], aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='Students in the first third (grade of 10-12)')
+
+third3 <- ggplot(df1[which(df1$G3>=13 & df1$G3<=20),], aes(x=goout, y=..count.., fill=goout)) +
+  geom_bar(aes(y = (..count..)/sum(..count..))) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  xlab(label='Measure of Going Out') +
+  ylab(label='Percentage') +
+  labs(title='Percentage of Students by Level of Going Out',
+       subtitle='Students in the first third (grade of 13-20)')
+
+list(third1, third2, third3)
+
+```
