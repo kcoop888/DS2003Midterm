@@ -13,11 +13,14 @@ output:
       code_folding: show
 ---
 
-```{r, echo=FALSE, results = 'hide', message=FALSE, warning=FALSE}
+```{r, include=FALSE}
 
 library(tidyverse)
 library(ggplot2)
 library(scales)
+library(dplyr)
+library(RColorBrewer)
+library(cowplot)
 
 ```
 
@@ -25,11 +28,11 @@ library(scales)
 
 ## Introduction / Abstract
 
-For the DS 2003 Midterm Project, we will be investigating the relationships of different variables in a dataset for Student Alcohol Consumption. This dataset was collected from two secondary schools in Portugal and contains a variety of variables ranging from demographics to drinking habits. We will use this dataset to to determine if there are any trends that we can identify regarding weekend drinking habits and frequency of going out for students, as well as, frequency of going out and the final grade the student received in the course. As the data is from two schools in Portugal, the grading scales will be different and since the legal drinking age 18, there will be data with students drinking much younger than 21.
+For the DS 2003 Midterm Project, we will be investigating the relationships of different variables in a dataset for Student Alcohol Consumption. This dataset was collected from a survey of students in math and Portuguese language courses in a secondary school in Portugal and contains a variety of variables ranging from demographics to drinking habits. We will use this dataset to to determine if there are any trends that we can identify regarding weekend drinking habits and frequency of going out for students, as well as, frequency of going out and the final grade the student received in the course. As the data is from two subjects in Portugal, the grading scales will be different, and since the legal drinking age is 18 there will be data with students drinking much younger than 21.
 
 ## Dataset Summary
 
-We will be using two datasets for this report. They both come from the same source and have the same columns (variables). The difference between the two is that one (df1) is for students in a math course and the other (df2) is for students in a Portuguese course. We will use the two to determine if the trends we observe for one course is also evident in the other course.
+We will be using two datasets for this report. They both come from the same source and have the same columns (variables). The difference between the two is that one (dfMath) is for students in a math course and the second (dfPort) is for students in a Portuguese course. We will use the two datasets to determine if the trends we observe for one course is also evident in the other course.
 
 For the first question of the report, we are using the following columns (variables):
 
@@ -78,8 +81,8 @@ Not used columns (variables):
 ```{r}
 # Load the dataset
 
-df1 <- read.csv('student-mat.csv')
-df2 <- read.csv('student-por.csv')
+dfMath <- read.csv('student-mat.csv')
+dfPort <- read.csv('student-por.csv')
 
 
 ```
@@ -92,20 +95,67 @@ In this sample population, does the frequency a student goes out have a relation
 ### Prediction
 We predict that number of students who have the highest weekend alcohol consumption will go out more, and the number students who have the least weekend alcohol consumption will go out less.
 
-### Chart & Chart Caption
+### Chart & Chart Caption{.tabset}
+#### Math Graph
+```{r}
+dfMath$goout <- factor(dfMath$goout, levels = c("1", "2", "3","4", "5"), 
+                       ordered= TRUE)
+dfMath$Walc <- factor(dfMath$Walc, levels = c("1", "2", "3","4", "5"), 
+                       ordered= TRUE)
+
+mathPlot <- ggplot(dfMath, aes(x = goout, y = after_stat(count), fill = Walc)) +
+  geom_bar(aes(y = (after_stat(count))/sum(after_stat(count))), 
+           position = position_dodge(), color = "black") + 
+  scale_y_continuous(labels = scales::percent,
+   limits = c(0,0.15)) +
+  scale_fill_brewer(palette="Spectral", direction=-1) +
+  theme_bw() +
+  xlab(label='Frequency of Going Out') +
+  ylab(label='Percentage') +
+  labs(title = "The Percentage of how Often Math Students Go Out",
+       subtitle = "Separated by the Students' Weekend Alcohol Consumption") +
+  facet_grid(.~Walc)
+
+mathPlot
+```
+
+**Figure 1. Faceted bar chart that displays the frequency a math student goes out on the x-axis and the percentage of students who go out respectively on the y-axis, the coloring of the bars correlates to the amount of alcohol the student reported to drinking during the weekend.**
+
+
+#### Portuguese Graph
 ```{r}
 
+dfPort$goout <- factor(dfPort$goout, levels = c("1", "2", "3","4", "5"), 
+                       ordered= TRUE)
+dfPort$Walc <- factor(dfPort$Walc, levels = c("1", "2", "3","4", "5"), 
+                       ordered= TRUE)
+
+portPlot <- ggplot(dfPort, aes(x = goout, y = after_stat(count), fill = Walc)) +
+  geom_bar(aes(y = (after_stat(count))/sum(after_stat(count))), 
+           position = position_dodge(), color = "black") + 
+  scale_y_continuous(labels = scales::percent,
+   limits = c(0,0.15)) +
+  scale_fill_brewer(palette="Spectral", direction=-1) +
+  theme_bw() +
+  xlab(label='Frequency of Going Out') +
+  ylab(label='Percentage') +
+  labs(title = "The Percentage of how Often Portuguese Students Go Out",
+       subtitle = "Separated by the Students' Weekend Alcohol Consumption") +
+  facet_grid(.~Walc)
+
+portPlot
 
 ```
+
+**Figure 2. Faceted bar chart that displays the frequency a Portuguese student goes out on the x-axis and the percentage of students who go out respectively on the y-axis, the coloring of the bars correlates to the amount of alcohol the student reported to drinking during the weekend.**
+
 ### Discussion
 
-We constructed a bar chart that had the number of times a student goes out on the x-axis and the count of students that go out that many times on the y-axis. Additionally, we separated each bar by the level of weekend alcohol consumption. From there, we faceted the graph by weekend alcohol consumption so that we could more easily analyze the relationship between going out and the number of students who go out that much for a particular level of weekend alcohol consumption. 
+We constructed a bar chart that had the number of times a student goes out on the x-axis and the percent of students that go out that many times on the y-axis. Additionally, we separated each bar by the level of weekend alcohol consumption. From there, we faceted the graph by weekend alcohol consumption so that we could more easily analyze the relationship between going out and the number of students who go out that much for a particular level of weekend alcohol consumption. 
 
-First looking at the data for the math class, the lowest level of weekend alcohol consumption seems to have a left-skewed normal curve based on the number of times a student goes out. The second lowest level and the medium level of weekend alcohol consumption seem to have a normal curve based on the number of times a student goes out. The two highest levels of weekend alcohol consumption seems to have a linearly increasing trend as a student goes out more. 
+Looking at the data of both the math and Portuguese, the lowest level of weekend alcohol consumption seems to have a left-skewed normal curve based on the number of times a student goes out. The second lowest level and the medium level of weekend alcohol consumption seem to have a more normal curve based on the number of times a student goes out. The two highest levels of weekend alcohol consumption seems to have a linearly increasing trend as a student goes out more. 
 
-Second looking at the data for the Portuguese class, the lowest level of weekend alcohol consumption seems to have a left-skewed normal curve based on the number of times a student goes out. The second lowest level and the medium level of weekend alcohol consumption seem to have a normal curve based on the number of times a student goes out. The two highest levels of weekend alcohol consumption seems to have a linearly increasing trend as a student goes out more. 
-
-Although the numbers may look different between the two classes, the trends / distributions for going out and weekend alcohol consumption are the same. As the number of nights a student goes out increases, there seems to be a positive linear relationship with the number of students and those with the highest levels of weekend alcohol consumption. As the number of nights a student increases until 3, the number of students who go out with the lowest levels of weekend alcohol consumption increases and after 3, the trend becomes negative, signifying a normal-curved relationship. The normal trend is understandable for the lower levels of alcohol consumption because as the number of nights a student goes out increases, the number of students who hardly consume alcohol is going to begin to decrease after a certain point.
+The trends and distributions for going out and weekend alcohol consumption are very similar in both graphs. For the students that drink more alcohol there is a positive linear relationship with the percentage of students and the students who go out more often. Focusing on the charts with a lower alcohol consumption, there is an increase of percentage versus how often the students went out until 3 nights, and then the trend became negative, signifying a normal-curved relationship. The normal trend for the lower levels is understandable in contrast to linear trend of the high levels of alcohol consumption because the students who do not drink as much go out for reasons other than to drink. 
 
 ### Chart Justification
 
@@ -121,75 +171,98 @@ In this sample, does the frequency that a student go out have a relationship wit
 We predict that students who go out more will receive a lower final grade and students who go out less will receive a higher final grade. Therefore, there will be a negative correlation with the frequency a student goes out and the final grade they received. 
 
 ### Chart & Chart Caption
-``` {r}
+``` {r, fig.show='hide', collapse=TRUE}
 
-df1$G3 <- factor(df1$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "8", "9", "10",
+dfMath$G3 <- factor(dfMath$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "8", "9", "10",
                                   "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), 
                  ordered= TRUE)
+dfMath$goout <- factor(dfMath$goout, levels=c("1", "2", "3", "4", "5"), ordered=TRUE)
 
-df1$goout <- factor(df1$goout, levels=c("1", "2", "3", "4", "5"), ordered=TRUE)
+dfMath$G3_interval <-fct_collapse(
+  dfMath$G3, 
+  "0-8" = c("0", "1", "2", "3", "4", "5", "6", "7", "8"), 
+  "9-10" = c("9", "10"), 
+  "11-13" = c("11", "12", "13"), 
+  "14-20" = c("14", "15", "16", "17", "18", "19", "20"))
 
-df1$G3_interval <-fct_collapse(df1$G3, "0-8" = c("0", "1", "2", "3", "4", "5", "6", "7", "8"), "9-10" = c("9", "10"), "11-13" = c("11", "12", "13"), "14-20" = c("14", "15", "16", "17", "18", "19", "20"))
-
-ggplot(df1, aes(x=goout, y=..count.., fill=G3_interval)) +
-  geom_bar(aes(y = (..count..)/sum(..count..)), position=position_dodge()) +
+percMath <- ggplot(dfMath, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
+  geom_bar(aes(y = after_stat(count)/sum(after_stat(count))),
+           position=position_dodge(), 
+           color="black") +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
   xlab(label='Frequency of Going Out') +
   ylab(label='Percentage') +
   labs(title='Percentage of Students in the Math Course by Frequency of Going Out') +
   facet_grid(G3_interval~.)
 
-```
-
-**Figure 5. Faceted bar chart that displays the frequency a student goes out on the x-axis and the percentage of students who go out that much on the y-axis, the coloring of the bars correlates to the interval that their final grade in the Math course falls into.**
-
-```{r}
-
-ggplot(df1, aes(x=goout, y=..count.., fill=G3_interval)) +
-  geom_bar(stat='count', position=position_dodge()) +
+countMath <- ggplot(dfMath, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
+  geom_bar(stat='count', position=position_dodge(), color = "black") +
   xlab(label='Frequency of Going Out') +
   ylab(label='Count') +
   labs(title='Count of Students in the Math Course by Frequency of Going Out') +
   facet_grid(G3_interval~.)
 
+percMath
+
+countMath
+
 ```
 
-**Figure 6. Faceted bar chart that displays the frequency a student goes out on the x-axis and the count of students who go out that much on the y-axis, the coloring of the bars correlates to the interval that their final grade in the Math course falls into.**
+```{r, echo=FALSE}
+percMath
+```
 
-``` {r}
+**Figure 3. Faceted bar chart that displays the frequency a math student goes out on the x-axis and the percentage of students who go out respectively on the y-axis, the coloring of the bars correlates to the interval that their final grade in the math course falls into.**
 
-df2$G3 <- factor(df2$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "8", "9", "10",
+```{r, echo=FALSE}
+countMath
+```
+
+**Figure 4. Faceted bar chart that displays the frequency a math student goes out on the x-axis and the count of students who go out that much on the y-axis, the coloring of the bars correlates to the interval that their final grade in the math course falls into.**
+
+``` {r, fig.show='hide', collapse=TRUE}
+
+dfPort$G3 <- factor(dfPort$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "8", "9", "10",
                                   "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), 
                  ordered= TRUE)
 
-df2$goout <- factor(df2$goout, levels=c("1", "2", "3", "4", "5"), ordered=TRUE)
+dfPort$goout <- factor(dfPort$goout, levels=c("1", "2", "3", "4", "5"), ordered=TRUE)
 
-df2$G3_interval <-fct_collapse(df2$G3, "0-8" = c("0", "1", "2", "3", "4", "5", "6", "7", "8"), "9-10" = c("9", "10"), "11-13" = c("11", "12", "13"), "14-20" = c("14", "15", "16", "17", "18", "19", "20"))
+dfPort$G3_interval <-fct_collapse(dfPort$G3, "0-8" = c("0", "1", "2", "3", "4", "5", "6", "7", "8"), "9-10" = c("9", "10"), "11-13" = c("11", "12", "13"), "14-20" = c("14", "15", "16", "17", "18", "19", "20"))
 
-ggplot(df2, aes(x=goout, y=..count.., fill=G3_interval)) +
-  geom_bar(aes(y = (..count..)/sum(..count..)), position=position_dodge()) +
+percPort <- ggplot(dfPort, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
+  geom_bar(aes(y = (after_stat(count))/sum(after_stat(count))), position=position_dodge(), 
+           color="black") +
   scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
   xlab(label='Frequency of Going Out') +
   ylab(label='Percentage') +
   labs(title='Percentage of Students in the Portuguese Course by Frequency of Going Out') +
   facet_grid(G3_interval~.)
 
-```
-
-**Figure 7. Faceted bar chart that displays the frequency a student goes out on the x-axis and the percentage of students who go out that much on the y-axis, the coloring of the bars correlates to the interval that their final grade in the Portuguese course falls into.**
-
-``` {r}
-
-ggplot(df2, aes(x=goout, y=..count.., fill=G3_interval)) +
-  geom_bar(stat='count', position=position_dodge()) +
+countPort <- ggplot(dfPort, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
+  geom_bar(stat='count', position=position_dodge(), color="black") +
   xlab(label='Frequency of Going Out') +
   ylab(label='Count') +
   labs(title='Count of Students in the Portuguese Course by Frequency of Going Out') +
   facet_grid(G3_interval~.)
 
+
+percPort
+
+countPort
+
+```
+```{r, echo=FALSE}
+percPort
 ```
 
-**Figure 8. Faceted bar chart that displays the frequency a student goes out on the x-axis and the count of students who go out that much on the y-axis, the coloring of the bars correlates to the interval that their final grade in the Portuguese course falls into.**
+**Figure 5. Faceted bar chart that displays the frequency a Portuguese student goes out on the x-axis and the percentage of students who go out that much on the y-axis, the coloring of the bars correlates to the interval that their final grade in the Portuguese course falls into.**
+
+```{r, echo=FALSE}
+countPort
+```
+
+**Figure 6. Faceted bar chart that displays the frequency a Portuguese student goes out on the x-axis and the count of students who go out that much on the y-axis, the coloring of the bars correlates to the interval that their final grade in the Portuguese course falls into.**
 
 We constructed a bar chart that had the number of times a student goes out on the x-axis and the count of students that go out that many times on the y-axis. Additionally, we separated each bar by the final grade the student in the course, which was separated into three intervals. From there, we faceted the graph by their final grade so that we could more easily analyze the relationship between going out and the number of students who go out that much and the final grade they received. 
 
