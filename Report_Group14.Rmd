@@ -170,8 +170,9 @@ In this sample, does the frequency that a student go out have a relationship wit
 ### Prediction
 We predict that students who go out more will receive a lower final grade and students who go out less will receive a higher final grade. Therefore, there will be a negative correlation with the frequency a student goes out and the final grade they received. 
 
-### Chart & Chart Caption
-``` {r, fig.show='hide', collapse=TRUE}
+### Chart & Chart Caption{.tabset}
+#### Math Percentage Graph
+``` {r}
 
 dfMath$G3 <- factor(dfMath$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "8", "9", "10",
                                   "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), 
@@ -189,38 +190,53 @@ percMath <- ggplot(dfMath, aes(x=goout, y=after_stat(count), fill=G3_interval)) 
   geom_bar(aes(y = after_stat(count)/sum(after_stat(count))),
            position=position_dodge(), 
            color="black") +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  scale_y_continuous(labels = scales::percent,
+   limits = c(0,0.15)) +
+  scale_fill_brewer(palette="Spectral", direction=-1) +
+  theme_bw() +
   xlab(label='Frequency of Going Out') +
   ylab(label='Percentage') +
-  labs(title='Percentage of Students in the Math Course by Frequency of Going Out') +
-  facet_grid(G3_interval~.)
-
-countMath <- ggplot(dfMath, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
-  geom_bar(stat='count', position=position_dodge(), color = "black") +
-  xlab(label='Frequency of Going Out') +
-  ylab(label='Count') +
-  labs(title='Count of Students in the Math Course by Frequency of Going Out') +
-  facet_grid(G3_interval~.)
+  labs(title='The Percentage of how Often Math Students Go Out', subtitle = "Separated by the Students' Final Course Grade") +
+  facet_grid(.~G3_interval)
 
 percMath
 
-countMath
-
-```
-
-```{r, echo=FALSE}
-percMath
 ```
 
 **Figure 3. Faceted bar chart that displays the frequency a math student goes out on the x-axis and the percentage of students who go out respectively on the y-axis, the coloring of the bars correlates to the interval that their final grade in the math course falls into.**
 
-```{r, echo=FALSE}
+#### Math Count Graph
+```{r}
+
+dfMath$G3 <- factor(dfMath$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "8", "9", "10",
+                                  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), 
+                 ordered= TRUE)
+dfMath$goout <- factor(dfMath$goout, levels=c("1", "2", "3", "4", "5"), ordered=TRUE)
+
+dfMath$G3_interval <-fct_collapse(
+  dfMath$G3, 
+  "0-8" = c("0", "1", "2", "3", "4", "5", "6", "7", "8"), 
+  "9-10" = c("9", "10"), 
+  "11-13" = c("11", "12", "13"), 
+  "14-20" = c("14", "15", "16", "17", "18", "19", "20"))
+
+countMath <- ggplot(dfMath, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
+  geom_bar(stat='count', position=position_dodge(), color = "black") +
+  scale_fill_brewer(palette="Spectral", direction=-1) +
+  scale_y_continuous(limits = c(0,80)) +
+  theme_bw() +
+  xlab(label='Frequency of Going Out') +
+  ylab(label='Count') +
+  labs(title='The Count of how Often Math Students Go Out', subtitle = "Separated by the Students' Final Course Grade") +
+  facet_grid(.~G3_interval)
+
 countMath
 ```
 
 **Figure 4. Faceted bar chart that displays the frequency a math student goes out on the x-axis and the count of students who go out that much on the y-axis, the coloring of the bars correlates to the interval that their final grade in the math course falls into.**
 
-``` {r, fig.show='hide', collapse=TRUE}
+#### Portuguese Percentage Graph
+``` {r}
 
 dfPort$G3 <- factor(dfPort$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "8", "9", "10",
                                   "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), 
@@ -233,36 +249,48 @@ dfPort$G3_interval <-fct_collapse(dfPort$G3, "0-8" = c("0", "1", "2", "3", "4", 
 percPort <- ggplot(dfPort, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
   geom_bar(aes(y = (after_stat(count))/sum(after_stat(count))), position=position_dodge(), 
            color="black") +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1L)) +
+  scale_y_continuous(labels = scales::percent,
+   limits = c(0,0.15)) +
+  scale_fill_brewer(palette="Spectral", direction=-1) +
+  theme_bw() +
   xlab(label='Frequency of Going Out') +
   ylab(label='Percentage') +
-  labs(title='Percentage of Students in the Portuguese Course by Frequency of Going Out') +
-  facet_grid(G3_interval~.)
-
-countPort <- ggplot(dfPort, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
-  geom_bar(stat='count', position=position_dodge(), color="black") +
-  xlab(label='Frequency of Going Out') +
-  ylab(label='Count') +
-  labs(title='Count of Students in the Portuguese Course by Frequency of Going Out') +
-  facet_grid(G3_interval~.)
-
+  labs(title='The Percentage of how Often Portuguese Students Go Out', subtitle = "Separated by the Students' Final Course Grade") +
+  facet_grid(.~G3_interval)
 
 percPort
 
-countPort
-
-```
-```{r, echo=FALSE}
-percPort
 ```
 
 **Figure 5. Faceted bar chart that displays the frequency a Portuguese student goes out on the x-axis and the percentage of students who go out that much on the y-axis, the coloring of the bars correlates to the interval that their final grade in the Portuguese course falls into.**
 
-```{r, echo=FALSE}
+#### Portuguese Count Graph
+```{r}
+
+dfPort$G3 <- factor(dfPort$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "8", "9", "10",
+                                  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"), 
+                 ordered= TRUE)
+
+dfPort$goout <- factor(dfPort$goout, levels=c("1", "2", "3", "4", "5"), ordered=TRUE)
+
+dfPort$G3_interval <-fct_collapse(dfPort$G3, "0-8" = c("0", "1", "2", "3", "4", "5", "6", "7", "8"), "9-10" = c("9", "10"), "11-13" = c("11", "12", "13"), "14-20" = c("14", "15", "16", "17", "18", "19", "20"))
+
+countPort <- ggplot(dfPort, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
+  geom_bar(stat='count', position=position_dodge(), color="black") +
+  scale_fill_brewer(palette="Spectral", direction=-1) +
+  scale_y_continuous(limits = c(0,80)) +
+  theme_bw() +
+  xlab(label='Frequency of Going Out') +
+  ylab(label='Count') +
+  labs(title='The Count of how Often Portuguese Students Go Out', subtitle = "Separated by the Students' Final Course Grade") +
+  facet_grid(.~G3_interval)
+
 countPort
 ```
 
 **Figure 6. Faceted bar chart that displays the frequency a Portuguese student goes out on the x-axis and the count of students who go out that much on the y-axis, the coloring of the bars correlates to the interval that their final grade in the Portuguese course falls into.**
+
+### Discussion
 
 We constructed a bar chart that had the number of times a student goes out on the x-axis and the count of students that go out that many times on the y-axis. Additionally, we separated each bar by the final grade the student in the course, which was separated into three intervals. From there, we faceted the graph by their final grade so that we could more easily analyze the relationship between going out and the number of students who go out that much and the final grade they received. 
 
