@@ -80,7 +80,8 @@ Not used columns (variables):
 
 ```{r}
 # Load the dataset
-
+getwd()
+setwd("C:/Users/brian/OneDrive/Desktop/0- Spring 2023 S8/DS2003/Midterm Project")
 dfMath <- read.csv('student-mat.csv')
 dfPort <- read.csv('student-por.csv')
 
@@ -196,7 +197,7 @@ percMath <- ggplot(dfMath, aes(x=goout, y=after_stat(count), fill=G3_interval)) 
   theme_bw() +
   xlab(label='Frequency of Going Out') +
   ylab(label='Percentage') +
-  labs(title='The Percentage of how Often Math Students Go Out', subtitle = "Separated by the Students' Final Course Grade") +
+  labs(title='The Percentage of How Often Math Students Go Out', subtitle = "Separated by the Students' Final Course Grade") +
   facet_grid(.~G3_interval)
 
 percMath
@@ -244,7 +245,7 @@ dfPort$G3 <- factor(dfPort$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "
 
 dfPort$goout <- factor(dfPort$goout, levels=c("1", "2", "3", "4", "5"), ordered=TRUE)
 
-dfPort$G3_interval <-fct_collapse(dfPort$G3, "0-8" = c("0", "1", "2", "3", "4", "5", "6", "7", "8"), "9-10" = c("9", "10"), "11-13" = c("11", "12", "13"), "14-20" = c("14", "15", "16", "17", "18", "19", "20"))
+dfPort$G3_interval <-fct_collapse(dfPort$G3, "0-10" = c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), "11-12" = c("11", "12"), "13-14" = c("13", "14"), "15-20" = c("15", "16", "17", "18", "19", "20"))
 
 percPort <- ggplot(dfPort, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
   geom_bar(aes(y = (after_stat(count))/sum(after_stat(count))), position=position_dodge(), 
@@ -273,7 +274,7 @@ dfPort$G3 <- factor(dfPort$G3, levels=c("0", "1", "2", "3","4", "5", "6", "7", "
 
 dfPort$goout <- factor(dfPort$goout, levels=c("1", "2", "3", "4", "5"), ordered=TRUE)
 
-dfPort$G3_interval <-fct_collapse(dfPort$G3, "0-8" = c("0", "1", "2", "3", "4", "5", "6", "7", "8"), "9-10" = c("9", "10"), "11-13" = c("11", "12", "13"), "14-20" = c("14", "15", "16", "17", "18", "19", "20"))
+dfPort$G3_interval <-fct_collapse(dfPort$G3, "0-10" = c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), "11-12" = c("11", "12"), "13-14" = c("13", "14"), "15-20" = c("15", "16", "17", "18", "19", "20"))
 
 countPort <- ggplot(dfPort, aes(x=goout, y=after_stat(count), fill=G3_interval)) +
   geom_bar(stat='count', position=position_dodge(), color="black") +
@@ -292,13 +293,13 @@ countPort
 
 ### Discussion
 
-We constructed a bar chart that had the number of times a student goes out on the x-axis and the count of students that go out that many times on the y-axis. Additionally, we separated each bar by the final grade the student in the course, which was separated into three intervals. From there, we faceted the graph by their final grade so that we could more easily analyze the relationship between going out and the number of students who go out that much and the final grade they received. 
+We constructed bar charts for the math and Portuguese classes which portrays the frequency (0-5) a student goes out on the x-axis and the percentages and counts of students that go out at that frequency on the y-axis. Additionally, we separated each chart by the final grades the students received in the course by quartiles. Each quartile contains a similar number of students. From there, we faceted the graph by their final grade so that we could more easily analyze the relationship between the frequency of going out and the final grade received. 
 
-[Explain observations for Math class] 
+The charts of the percentage of how often math students go out related to their final grade in the course divides the class into four quartiles of almost equivalent numbers of students. There are 395 students enrolled in the math class, and the quartiles are divided as such: 0-8: 102 students; 9-10: 84 students; 11-13: 109 students; 14-20: 100 students. As pictured, it can be seen that the charts shift from a left skewed graph for the students who received a grade in the lowest quartile (0-8), to a more right skewed graph in the highest quartile (14-20). With this selection of data, a left skewed graph can be interpreted as such: students who go out more receive will receive lower final grades in the math class. On the other hand, a right skewed graph correlates to a higher percentage of students who go out less receiving higher final grades than those who respond that they go out less. The second graph displays the same information, just with counts instead of a percentage. It can be seen that each quartile contains about the same number of students, reinforcing the validity of the percentage charts.
 
-[Explain observations for Portuguese class]
+For the Portuguese class, the premise of the charts are exactly the same as the charts for the math class. The differences in the data are that the Portuguese class is taken by 649 students, and the grade distribution is a lot different. As a result, the quartiles are marked by different scores in the class, and they contain a wider range of students leading to a more siginifcant difference in the numbers in each quartile. The quartiles are divided as such: 0-10: 197 students; 11-12: 176 students; 13-14: 145 students; 15-20: 131 students. The skew trends follow just as the math class, however, the skews are less extreme. The second and third quartiles of grades of 11-14 are mostly normal, while the first (0-10) and fourth (15-20) quartiles are more left and right skewed, respectively. Thus, it can be inferred that students who go out more receive lower grades in the class on average.
 
-[Relate the trends for both classes]
+It can be inferred from both groups of charts that students who go out more often receive lower grades on average than their peers who go out less and receive higher grades in the class. Both groups of charts portray a shift from left skewed to right skewed. The difference in how the quartiles are divided may be attributed to the level of difficulty of the class. Students on average received higher grades in the Portuguese class compared to the math class, and this lessened degree of difficulty may explain the less extreme skews in its graphs. 
 
 ### Chart Justification
 
@@ -306,3 +307,4 @@ We decided to answer our question by using bar charts that were differentiated a
 
 ## Conclusion
 
+Both of our questions concern the students' levels of going out and drinking while also cross-referencing this information with the grades they received in two different classes. This information is directly relevant to us and our peers, as much of college is balancing a social life with an extremely rigorous academic life. While these students do not attend school in the United States, the trends and relations can be attributed to any student. The first question with its graphs discover that the students that go out at a higher frequency tend to drink more on average compared to those who go out at a lesser frequency. Moving to the second question, we found that students who go out more receive lower grades on average. Combining the interpretations from the two questions, it can be loosely inferred that the students drinking more will receive lower grades in the two classes. It is a strong possibility that the same is true for any student, so a recommendation for students looking to receive higher grades in their classes is to go out less and drink less, as a heightened social life may negatively affect a student's academic performance. 
